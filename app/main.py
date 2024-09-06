@@ -3,7 +3,7 @@ from typing import Union
 from contextlib import asynccontextmanager
 from prisma import Prisma
 from routers import users
-from dependencies import prisma
+from app.dependencies import prisma
 
 @asynccontextmanager
 async def lifespan(app:FastAPI):
