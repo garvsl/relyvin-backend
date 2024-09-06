@@ -1,7 +1,22 @@
 from fastapi import FastAPI
 from typing import Union
+from contextlib import asynccontextmanager
+from prisma import Prisma
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app:FastAPI):
+    prisma = Prisma()
+    await prisma.connect()
+    print('Connecting to Prisma')
+
+    yield
+
+    await prisma.disconnect()
+    print('Disconnecting from Prisma')
+
+
+app = FastAPI(lifespan=lifespan)
+
 
 @app.get("/")
 def read_root():
