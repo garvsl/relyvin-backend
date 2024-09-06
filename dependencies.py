@@ -7,3 +7,7 @@ async def get_db() -> Prisma:
     return prisma
 
 DB = Depends(get_db)
+
+
+
+    
