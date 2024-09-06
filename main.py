@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from typing import Union
 from contextlib import asynccontextmanager
 from prisma import Prisma
+from .routers import users
 
 @asynccontextmanager
 async def lifespan(app:FastAPI):
@@ -22,6 +23,7 @@ app = FastAPI(lifespan=lifespan)
 def read_root():
     return {"Hello": "World"}
 
+app.include_router(users.router)
 
 if __name__ == "__main__":
     import uvicorn
