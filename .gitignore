@@ -15,6 +15,7 @@ downloads/
 eggs/
 .eggs/
 lib/
+dump.rdb
 lib64/
 parts/
 sdist/
