@@ -25,11 +25,11 @@ async def login_user(email:str, password:str, db: Prisma = DB):
 @router.get("/users/", tags=["users"])
 async def read_users(db: Prisma = DB, user:str = USER):
     users = await db.user.find_many()
-    return users
+    return [user.model_dump(exclude={"hashedPassword"}) for user in users]
 
     
 @router.get("/users/me", tags=["users"])
-async def read_user_me(user:str = USER):
-    return get_user(user)
+async def read_user_me(db:Prisma = DB, user:str = USER):
+    return await get_user(user, db)
 
 
