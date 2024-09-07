@@ -14,6 +14,10 @@ async def get_user(id: str, prisma: Prisma):
     user = await prisma.user.find_unique(
         where={
             "id":id
+        },
+        include={
+            "Scraper":True,
+            "Script":True
         }
     )
     return user.model_dump(exclude={"hashedPassword"}) 
