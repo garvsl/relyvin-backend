@@ -3,8 +3,8 @@ import uuid
 import bcrypt
 from fastapi import APIRouter, Depends, HTTPException
 from prisma import Prisma
-from app.dependencies import DB
-from app.prisma.db.user import create_session, get_user_full
+from app.dependencies import DB, USER
+from app.prisma.db.user import create_session, get_user, get_user_full
 
 router = APIRouter()
 
@@ -16,20 +16,20 @@ async def login_user(email:str, password:str, db: Prisma = DB):
     
     session = create_session(uuid.uuid4(), {'userId':user.id}, db)
     
-    return user.model_dump(exclude={"hashedPassword"})
+    return {
+        'user': user.model_dump(exclude={"hashedPassword"}),
+        'session_id': session.sid
+    }
 
 
 @router.get("/users/", tags=["users"])
-async def read_users(db: Prisma = DB):
-    # users = await db.user.find_many()
-    # return users
-    print('hello')
+async def read_users(db: Prisma = DB, user:str = USER):
+    users = await db.user.find_many()
+    return users
+
     
 @router.get("/users/me", tags=["users"])
-async def read_user_me():
-    return {"username": "fakecurrentuser"}
+async def read_user_me(user:str = USER):
+    return get_user(user)
 
 
-@router.get("/users/{username}", tags=["users"])
-async def read_user(username: str):
-    return {"username": username}
