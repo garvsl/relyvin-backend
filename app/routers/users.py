@@ -14,7 +14,7 @@ async def login_user(email:str, password:str, db: Prisma = DB):
     if not user or not bcrypt.checkpw(password.encode(), user.hashedPassword.encode()):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-    session = create_session(uuid.uuid4(), {'userId':user.id}, db)
+    session = await create_session(str(uuid.uuid4()), {'userId':user.id}, db)
     
     return {
         'user': user.model_dump(exclude={"hashedPassword"}),
