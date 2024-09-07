@@ -26,19 +26,20 @@ async def session_middleware(request: Request, call_next):
 
     if not session_id:
         return await call_next(request)
+    
 
     session = await prisma.session.find_unique(
         where={
-            'sid':session_id
+            'sid':session_id.split(" ")[1]
         }
     )
     
-    if not session or session.expiresAt < datetime.now(datetime.UTC):
+    if not session or session.expiresAt < datetime.datetime.now(datetime.UTC):
         return JSONResponse(
             status_code=401,
             content={"detail":"Invalid or expired session"}
         )
-    
+
     request.state.session = json.loads(session.data)    
     response = await call_next(request)
     return response
