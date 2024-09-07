@@ -7,6 +7,10 @@ async def get_user_full(email: str, prisma: Prisma):
     return await prisma.user.find_unique(
         where={
             "email":email
+        },
+        include={
+            "Scraper":True,
+            "Script":True
         }
     )
 
