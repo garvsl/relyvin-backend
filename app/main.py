@@ -6,7 +6,9 @@ from contextlib import asynccontextmanager
 from fastapi.responses import JSONResponse
 from prisma import Prisma
 from routers import users
-from app.dependencies import prisma
+from app.dependencies import prisma, redis_client
+
+
 
 @asynccontextmanager
 async def lifespan(app:FastAPI):
@@ -18,6 +20,7 @@ async def lifespan(app:FastAPI):
     print('Disconnecting from Prisma')
 
 
+
 app = FastAPI(lifespan=lifespan)
 
 @app.middleware("http")
@@ -27,20 +30,46 @@ async def session_middleware(request: Request, call_next):
     if not session_id:
         return await call_next(request)
     
+    session_id = session_id.split(" ")[1]
 
-    session = await prisma.session.find_unique(
-        where={
-            'sid':session_id.split(" ")[1]
-        }
-    )
-    
-    if not session or session.expiresAt < datetime.datetime.now(datetime.UTC):
-        return JSONResponse(
-            status_code=401,
-            content={"detail":"Invalid or expired session"}
+    session_data = redis_client.get(f"session:{session_id}")
+
+    if session_data:
+        session = json.loads(session_data)
+        print("Found cache")
+    else:
+
+        session = await prisma.session.find_unique(
+            where={
+                'sid':session_id
+            }
+        )
+        
+        if not session:
+            return JSONResponse(
+                status_code=401,
+                content={"detail":"Invalid session"}
+            )
+        
+        session = json.loads(session.data)
+
+        print("Creating cache")
+        redis_client.setex(
+            f"session:{session_id}",
+            31536000,  #1 year
+            json.dumps(session)
         )
 
-    request.state.session = json.loads(session.data)    
+    
+    if 'expiresAt' in session and session['expiresAt'] < datetime.datetime.now(datetime.UTC).isoformat():
+        return JSONResponse(
+            status_code=401,
+            content={"detail": "Expired session"}
+        )
+    
+    redis_client.expire(f"session:{session_id}", 31536000) #refresh session
+
+    request.state.session = session
     response = await call_next(request)
     return response
     
