@@ -16,6 +16,6 @@ security = HTTPBearer()
 async def get_current_user(request:Request, credentials:HTTPAuthorizationCredentials = Depends(security)):
     if not hasattr(request.state, 'session'):
         raise HTTPException(status_code=401, detail="Auth Required")
-    return request.state.session['user_id']
+    return request.state.session['userId']
 
 USER = Depends(get_current_user)
