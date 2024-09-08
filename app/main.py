@@ -5,11 +5,11 @@ from typing import Union
 from contextlib import asynccontextmanager
 from fastapi.responses import JSONResponse
 from prisma import Prisma
-from app.routers import scripts
+from app.routers import influencers, scrapers, scripts
 from app.routers import users
 from app.dependencies import prisma, redis_client
 
-
+# c53008b6-0d30-49e3-8f72-1cd33c1c0905
 
 @asynccontextmanager
 async def lifespan(app:FastAPI):
@@ -82,6 +82,9 @@ def read_root():
 
 app.include_router(users.router)
 app.include_router(scripts.router)
+app.include_router(scrapers.router)
+app.include_router(influencers.router)
+
 
 if __name__ == "__main__":
     import uvicorn
