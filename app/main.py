@@ -5,7 +5,7 @@ from typing import Union
 from contextlib import asynccontextmanager
 from fastapi.responses import JSONResponse
 from prisma import Prisma
-from app.routers import influencers, scrapers, scripts
+from app.routers import influencers, scrapers, scraping, scripts, usernames
 from app.routers import users
 from app.dependencies import prisma, redis_client
 
@@ -84,6 +84,8 @@ app.include_router(users.router)
 app.include_router(scripts.router)
 app.include_router(scrapers.router)
 app.include_router(influencers.router)
+app.include_router(scraping.router)
+app.include_router(usernames.router)
 
 
 if __name__ == "__main__":
