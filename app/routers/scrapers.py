@@ -1,0 +1,19 @@
+
+from typing import Optional
+from fastapi import APIRouter
+from prisma import Prisma
+
+from app.dependencies import DB, USER
+from app.prisma.db.scraper import create_scraper, get_scrapers
+
+
+router = APIRouter()
+
+@router.get("/scrapers/me", tags=["scrapers"])
+async def read_scrapers_me(db:Prisma = DB, user:str = USER):
+    return await get_scrapers(user, db)
+
+
+@router.post("/scrapers/me/create", tags=["scrapers"])
+async def create_scraper_me(email:str, password:str, db:Prisma = DB, user:str = USER):
+    return await create_scraper(user, db, email, password)
