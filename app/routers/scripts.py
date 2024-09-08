@@ -9,7 +9,7 @@ from app.prisma.db.script import create_script, get_scripts, update_script
 router = APIRouter()
 
 @router.get("/scripts/me", tags=["scripts"])
-async def read_script_me(db:Prisma = DB, user:str = USER):
+async def read_scripts_me(db:Prisma = DB, user:str = USER):
     return await get_scripts(user, db)
 
 @router.post("/scripts/me/update", tags=["scripts"])
