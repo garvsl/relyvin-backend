@@ -26,6 +26,10 @@ async def get_user(id: str, prisma: Prisma):
     )
     return user.model_dump(exclude={"hashedPassword"}) 
 
+async def get_users(prisma: Prisma):
+    users = await prisma.user.find_many()
+    return [user.model_dump(exclude={"hashedPassword"}) for user in users]
+
 async def create_session(sid: str, data:dict, prisma: Prisma):
     session = await prisma.session.create(
         data={

@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from prisma import Prisma
 import redis
 from app.dependencies import DB, REDIS, USER
-from app.prisma.db.user import create_session, get_user, get_user_full
+from app.prisma.db.user import create_session, get_user, get_user_full, get_users
 
 router = APIRouter()
 
@@ -30,8 +30,7 @@ async def login_user(email:str, password:str, db: Prisma = DB, redis_client: red
 
 @router.get("/users/", tags=["users"])
 async def read_users(db: Prisma = DB, user:str = USER):
-    users = await db.user.find_many()
-    return [user.model_dump(exclude={"hashedPassword"}) for user in users]
+    return await get_users(db)
 
     
 @router.get("/users/me", tags=["users"])
