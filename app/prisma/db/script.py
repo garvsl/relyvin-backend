@@ -10,7 +10,7 @@ async def get_scripts(id: str, prisma:Prisma):
             'userId': id
         },
         order={
-        'created': 'desc',
+        'created': 'asc',
         },
     )
 
@@ -26,4 +26,14 @@ async def update_script(id: str, prisma:Prisma, title:Optional[str] = None, body
             'id': id
         },
         data=data
+    )
+
+
+async def create_script(id: str, prisma:Prisma, title:str, body:str):
+    return await prisma.script.create(
+        data={
+            'title':title,
+            'body':body,
+            'userId':id
+        }
     )
