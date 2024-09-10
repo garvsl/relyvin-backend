@@ -24,7 +24,7 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    format="%(asctime)s: %(message)s",
     handlers=[
         logging.FileHandler("app.log"),  # Save logs to a file
         logging.StreamHandler(sys.stdout)  # Output logs to stdout
