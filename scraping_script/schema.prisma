@@ -18,6 +18,7 @@ model Script {
   User    User     @relation(fields: [userId], references: [id])
 }
 
+
 model Influencer {
   id      String   @id @default(uuid())
   handle  String   @unique
@@ -26,11 +27,18 @@ model Influencer {
   created DateTime @default(now())
 }
 
+enum CreatedBy {
+  GARV
+  MOH
+  KP
+}
+
 model Username {
   id      String   @id @default(uuid())
   handle  String   @unique
   checked Boolean  @default(false)
   created DateTime @default(now())
+  CreatedBy CreatedBy @default(GARV)
 }
 
 model Email {
