@@ -7,3 +7,11 @@ prisma db push --schema="./app/prisma/schema.prisma"
 .env:
 RESEND_API_KEY=
 DATABASE_URL=
+
+cd app
+
+python3 main.py
+
+redis-server
+
+celery -A app.task worker
