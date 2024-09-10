@@ -25,6 +25,7 @@ model Influencer {
   email   String   @unique
   name    String
   created DateTime @default(now())
+  checked Boolean  @default(false)
 }
 
 enum CreatedBy {

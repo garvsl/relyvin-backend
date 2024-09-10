@@ -9,6 +9,7 @@ datasource db {
 
 // postgresql://goofyahhgarv:@localhost:5432/electron?schema=public
 
+
 model Script {
   id      String   @id @default(uuid())
   title   String
@@ -18,12 +19,20 @@ model Script {
   User    User     @relation(fields: [userId], references: [id])
 }
 
+
 model Influencer {
   id      String   @id @default(uuid())
   handle  String   @unique
   email   String   @unique
   name    String
   created DateTime @default(now())
+  checked Boolean  @default(false)
+}
+
+enum CreatedBy {
+  GARV
+  MOH
+  KP
 }
 
 model Username {
@@ -31,6 +40,7 @@ model Username {
   handle  String   @unique
   checked Boolean  @default(false)
   created DateTime @default(now())
+  CreatedBy CreatedBy @default(GARV)
 }
 
 model Email {
