@@ -29,3 +29,5 @@ async def get_current_user(request:Request, credentials:HTTPAuthorizationCredent
     return request.state.session['userId']
 
 USER = Depends(get_current_user)
+
+process_dict = {}

@@ -1,17 +1,16 @@
-
 import datetime
 import os
 import subprocess
-from time import sleep
 from celery import Celery
-
+from app.dependencies import process_dict
 
 app = Celery(__name__)
 app.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
 app.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379")
 
-@app.task
-def scraping(user) -> str:
+
+@app.task(bind=True)
+def scraping(self, user) -> str:
     script_path = os.path.join(os.getcwd(), 'scraping_script', 'app.py')
     venv_path = os.path.join(os.getcwd(), 'scraping_script', 'venv', 'bin', 'python')
     if not os.path.exists(venv_path):
@@ -23,12 +22,22 @@ def scraping(user) -> str:
     print(f"Executing command: {' '.join(command)}")
 
     try:
-        result = subprocess.run(command, check=True, capture_output=True, text=True)
-        print(f"Script output: {result.stdout}")
-        return f"Scraping completed successfully. Output: {result.stdout}"
-    except subprocess.CalledProcessError as e:
-        print(f"Script error output: {e.stderr}")
-        return f"Scraping failed. Error: {e.stderr}"
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        process_dict[self.request.id] = process  
+    
+        stdout, stderr = process.communicate()
+
+  
+        if process.returncode == 0:
+            print(f"Script output: {stdout}")
+            return f"Scraping completed successfully. Output: {stdout}"
+        else:
+            print(f"Script error output: {stderr}")
+            return f"Scraping failed. Error: {stderr}"
     except Exception as e:
         print(f"Unexpected error: {str(e)}")
         return f"Scraping failed due to unexpected error: {str(e)}"
+    finally:
+      
+        if self.request.id in process_dict:
+            del process_dict[self.request.id]
