@@ -18,28 +18,20 @@ def _to_task_out(r: AsyncResult) -> TaskOut:
 
 
 @router.get("/scraping/start", tags=["scraping"])
-def start() -> TaskOut:
-    r = task.dummy_task.delay()
+def start(user:str = USER) -> TaskOut:
+    r = task.scraping.delay(user)
     return _to_task_out(r)
 
 @router.get("/scraping/stop", tags=['scraping'])
-def stop(task_id: str) -> TaskOut:
+def stop(task_id: str, user:str = USER) -> TaskOut:
     task.app.control.revoke(task_id, terminate=True, signal="SIGKILL")
     r = task.app.AsyncResult(task_id)
     return _to_task_out(r)
 
 @router.get("/scraping/status", tags=["scraping"])
-def status(task_id: str) -> TaskOut:
+def status(task_id: str, user:str = USER) -> TaskOut:
     r = task.app.AsyncResult(task_id)
     return _to_task_out(r)
 
-    
 
-@router.post("/scraping/me/start", tags=["scraping"])
-async def start_scraping(db:Prisma = DB, user:str = USER):
-    # current user scraper exists check
-    # current user script exists check
-    # usernames num and ensure greater than zero
-    # make sure there can only be certain number of tasks running from a user
-    # error tracking on the scraper proper
-    print('hi')
+
