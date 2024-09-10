@@ -22,13 +22,18 @@ def start() -> TaskOut:
     r = task.dummy_task.delay()
     return _to_task_out(r)
 
+@router.get("/scraping/stop", tags=['scraping'])
+def stop(task_id: str) -> TaskOut:
+    task.app.control.revoke(task_id, terminate=True, signal="SIGKILL")
+    r = task.app.AsyncResult(task_id)
+    return _to_task_out(r)
 
 @router.get("/scraping/status", tags=["scraping"])
 def status(task_id: str) -> TaskOut:
     r = task.app.AsyncResult(task_id)
     return _to_task_out(r)
 
-
+    
 
 @router.post("/scraping/me/start", tags=["scraping"])
 async def start_scraping(db:Prisma = DB, user:str = USER):
