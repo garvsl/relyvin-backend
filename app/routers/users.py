@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from prisma import Prisma
 import redis
 from app.dependencies import DB, REDIS, USER
-from app.prisma.db.user import create_session, get_user, get_user_full, get_users
+from app.db.user import create_session, get_user, get_user_full, get_users
 
 router = APIRouter()
 

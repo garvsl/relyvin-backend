@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from prisma import Prisma
 
 from app.dependencies import DB, USER
-from app.prisma.db.influencer import get_influencer, get_influencers, get_influencers_count
+from app.db.influencer import get_influencer, get_influencers, get_influencers_count
 
 
 router = APIRouter()

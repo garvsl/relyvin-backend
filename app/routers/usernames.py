@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from prisma import Prisma
 
 from app.dependencies import DB, USER
-from app.prisma.db.username import get_usernames, get_usernames_count
+from app.db.username import get_usernames, get_usernames_count
 
 
 router = APIRouter()

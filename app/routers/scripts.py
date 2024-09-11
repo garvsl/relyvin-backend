@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from prisma import Prisma
 
 from app.dependencies import DB, USER
-from app.prisma.db.script import create_script, get_scripts, update_script
+from app.db.script import create_script, get_scripts, update_script
 
 
 router = APIRouter()

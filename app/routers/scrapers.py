@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from prisma import Prisma
 
 from app.dependencies import DB, USER
-from app.prisma.db.scraper import create_scraper, get_scrapers
+from app.db.scraper import create_scraper, get_scrapers
 
 
 router = APIRouter()
