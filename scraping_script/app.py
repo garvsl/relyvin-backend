@@ -183,16 +183,16 @@ async def get_usernames(prisma):
     random.shuffle(usernames)
 
     username_ids = [u.id for u in usernames]
-    # await prisma.username.update_many(
-    #     where={
-    #         'id': {
-    #             'in': username_ids
-    #         }
-    #     },
-    #     data={
-    #         'checked': True
-    #     }
-    # )
+    await prisma.username.update_many(
+        where={
+            'id': {
+                'in': username_ids
+            }
+        },
+        data={
+            'checked': True
+        }
+    )
     
     
     return usernames if len(usernames) > 0 else None
@@ -296,25 +296,6 @@ async def process_profile(driver, prisma, username, user_dict):
         return
         # iterate xpath fail counter
 
-def save_session(user_id):
-    with open('session.json', 'w') as f:
-        json.dump({'user_id': user_id, "scraper_info":False}, f)
-
-def save_status(user_id):
-    with open('session.json', 'w') as f:
-        json.dump({'user_id': user_id, "scraper_info":True}, f)
-
-def load_session():
-    if os.path.exists('session.json'):
-        with open('session.json', 'r') as f:
-            return json.load(f).get('user_id')
-    return None
-
-def load_status():
-    if os.path.exists('session.json'):
-        with open('session.json', 'r') as f:
-            return json.load(f).get('scraper_info')
-    return None
 
 async def main(cur_user:str):
     options = webdriver.ChromeOptions()
