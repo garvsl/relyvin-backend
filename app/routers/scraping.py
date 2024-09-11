@@ -22,6 +22,11 @@ def start(user:str = USER) -> TaskOut:
     r = task.scraping.delay(user)
     return _to_task_out(r)
 
+@router.get("/scraping/usernames/start", tags=["scraping"])
+def start(user:str = USER) -> TaskOut:
+    r = task.usernames_scrape.delay(user)
+    return _to_task_out(r)
+
 @router.get("/scraping/stop", tags=['scraping'])
 def stop(task_id: str, user: str = USER) -> TaskOut:
     task.app.control.revoke(task_id, terminate=True, signal="SIGKILL")
