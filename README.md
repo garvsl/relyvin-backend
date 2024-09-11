@@ -14,4 +14,4 @@ python3 main.py
 
 redis-server
 
-celery -A app.task worker
+celery -A app.task worker -l INFO -f celery.logs
