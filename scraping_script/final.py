@@ -95,7 +95,7 @@ def normalize_stylized_text(text):
 
 def extract_first_name(full_name):
     if not full_name or not isinstance(full_name, str):
-        return "love"
+        return "Love"
 
     full_name = full_name.strip()
 
@@ -106,7 +106,7 @@ def extract_first_name(full_name):
     parts = [part for part in parts if part and len(part) > 1 and not part.isnumeric()]
 
     if not parts:
-        return "love"
+        return "Love"
 
     first_name = parts[0]
 
@@ -274,6 +274,7 @@ async def process_profile(driver, prisma, username, user_dict):
             
             try:
                 email = resend.Emails.send(params)
+                logger.info(f"Email sent for {user_dict.get('name')}")
             except Exception as e:
                 logger.info(f"Failed to send: {e}")
                 return False
@@ -546,9 +547,9 @@ async def main(cur_user:str):
     prisma = Prisma()
     await prisma.connect()
 
-    kp = await get_user("c58cd9c3-76da-4790-92f8-54e27d432cc2")
-    moh =  await get_user("b72731c5-6f3c-4414-b293-bf28d6611dda")
-    garv =  await get_user('9c86640e-af9a-432b-a198-7b794f6456e9')
+    kp = await get_user("c58cd9c3-76da-4790-92f8-54e27d432cc2", prisma)
+    moh =  await get_user("b72731c5-6f3c-4414-b293-bf28d6611dda", prisma)
+    garv =  await get_user('9c86640e-af9a-432b-a198-7b794f6456e9', prisma)
 
     
     try:
@@ -564,7 +565,7 @@ async def main(cur_user:str):
     except Exception as e:
         return logger.info(f"User not found {e}...exiting")
         
-    user.model_dump(exclude={'hashedPassword'})
+    user = user.model_dump(exclude={'hashedPassword'})
     
     if user is None:
         logger.info("User not found")
@@ -669,7 +670,7 @@ async def main(cur_user:str):
             logger.info(f"Running for: {days} days, {hours} hours, and {minutes} minutes")
             logger.info(f"Rate: {rate_per_hour:.2f} emails per hour\n")
             logger.info(f"Checked: {iterations} accounts")
-            logger.info(f"Usernames left: {usernames}")
+            # logger.info(f"Usernames left: {usernames}")
             logger.info(f"Total: {int(emailsSent)} emails sent")
             logger.info('\n')
             
