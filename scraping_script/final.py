@@ -670,7 +670,6 @@ async def main(cur_user:str):
             logger.info(f"Running for: {days} days, {hours} hours, and {minutes} minutes")
             logger.info(f"Rate: {rate_per_hour:.2f} emails per hour\n")
             logger.info(f"Checked: {iterations} accounts")
-            # logger.info(f"Usernames left: {usernames}")
             logger.info(f"Total: {int(emailsSent)} emails sent")
             logger.info('\n')
             
