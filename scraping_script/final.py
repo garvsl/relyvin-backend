@@ -674,9 +674,11 @@ async def main(cur_user:str):
             logger.info('\n')
             
             username = usernames.pop(0)
-            await set_checked(prisma, username.handle)
-            logger.info("Set Checked")
+            
+            
             proc = await process_profile(driver, prisma, username.handle, kp if emailsSent % 2 == 0 else moh)
+            logger.info("Set Checked")
+            await set_checked(prisma, username.handle)
 
             if proc:
                 emailsSent += 1
