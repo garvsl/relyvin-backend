@@ -22,7 +22,7 @@ load_dotenv()
 resend.api_key = os.getenv('RESEND_API_KEY')
 ssl._create_default_https_context = ssl._create_unverified_context
 
-logging.basicConfig(
+logging.basicConfig( 
     level=logging.INFO,
     format="%(asctime)s: %(message)s",
     handlers=[
@@ -151,6 +151,8 @@ async def get_usernames(prisma):
             'checked': False,
         }
     )
+
+    logger.info(f'Total unchecked Usernames: {total_unchecked}')
 
     if total_unchecked == 0:
         return None
