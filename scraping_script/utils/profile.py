@@ -33,7 +33,7 @@ async def extract_bio(driver, XPATHS, logger):
     except:
         logger.info('No "More" button found')
     
-    return await get_element_text(driver, XPATHS['BIO'], timeout=2)
+    return await get_element_text(driver, XPATHS['BIO'], logger, timeout=2)
     
 def normalize_stylized_text(text):
     char_map = {
