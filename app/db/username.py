@@ -9,4 +9,8 @@ async def get_usernames(prisma:Prisma, skip:Optional[int] = 0 ):
     )
 
 async def get_usernames_count(prisma:Prisma):
-    return await prisma.username.count()
+    return await prisma.username.count(
+        where={
+            'checked':False
+        }
+    )

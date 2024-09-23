@@ -25,3 +25,11 @@ async def create_scraper(id: str, prisma:Prisma, email:str, password:str):
             'userId':id
         }
     )
+
+async def delete_scraper(userId: str, prisma:Prisma, id:str):
+    return await prisma.scraper.delete(
+        where={
+            'id':id,
+            'userId':userId
+        }
+    )
