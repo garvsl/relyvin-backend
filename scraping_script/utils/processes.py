@@ -26,7 +26,7 @@ async def process_profile(driver, prisma, username, user_dict, XPATHS, logger, a
 
             await asyncio.sleep(random.uniform(0.5, 1.5))
             # await asyncio.sleep(30)
-            detected = await scrape_detect(driver, logger, asyncio)
+            detected = await scrape_detect(driver, logger, asyncio, XPATHS)
 
             if(detected):
                 return {"status": 'detected'}
@@ -102,7 +102,7 @@ async def process_usernames(driver, prisma, influencer, XPATHS, logger, asyncio)
         return num
     
     await asyncio.sleep(2)
-    await scrape_detect(driver, logger, asyncio)
+    await scrape_detect(driver, logger, asyncio, XPATHS)
 
     try:
         await driver.find_element(By.XPATH, XPATHS['POSTS'], timeout=3)

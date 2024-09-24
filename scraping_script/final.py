@@ -84,10 +84,13 @@ async def main(cur_user:str):
     now = datetime.datetime.now()
     while True:
 
-        if index != 0:
-            print('Sleeping')
+        if iterations != 0:
+            
             # await asyncio.sleep(30) 
-            await asyncio.sleep(random.uniform(400, 1600)) 
+            time_sleep = random.uniform(400, 1600)
+            time_now = datetime.datetime.now()
+            print(f'Start sleeping for {time_sleep/60} mins at {time_now}')
+            await asyncio.sleep(time_sleep) 
         
         if index == 3:
             index = 0
