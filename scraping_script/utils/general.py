@@ -11,7 +11,7 @@ async def navigate(driver, handle, logger, asyncio):
     try:
         # await adaptive_rate_limit()
         await driver.get(f"https://www.instagram.com/{handle}")
-        await asyncio.sleep(random.uniform(1, 2))
+        await asyncio.sleep(random.uniform(2, 3))
         return True
     except Exception as e:
         logger.info(f"Error navigating to {handle}: {e}")
@@ -23,7 +23,7 @@ async def scrape_detect(driver, logger, asyncio):
         scrape = await driver.find_element(By.XPATH, PATHS['SCRAPE_DETECT'])
         logger.info('Scrape detected, clicking...')
         await scrape.click()
-        await asyncio.sleep(random.uniform(0.5, 1.5))
+        await asyncio.sleep(random.uniform(4, 6.5))
     except:
         pass
 
@@ -79,20 +79,20 @@ async def scraper_sign_in(driver, prisma:Prisma, user_scraper, logger, asyncio):
 
     logger.info(f"Cookies: 'ds': {ds_user_id} 'session':{sessionId} ")
 
-    if ds_user_id and sessionId:
-        logger.info("Saving cookies")
-        try:
-            scraper = await prisma.scraper.update(
-            where={
-                'id':user_scraper.get('id')
-            }
-            ,
-            data={
-                'cookie':json.dumps({'ds_user_id': ds_user_id, 'sessionid':sessionId})
-            }
-            )
-        except Exception as e:
-            logger.info(f"Error updating scraper {e}")
+    # if ds_user_id and sessionId:
+    #     logger.info("Saving cookies")
+    #     try:
+    #         scraper = await prisma.scraper.update(
+    #         where={
+    #             'id':user_scraper.get('id')
+    #         }
+    #         ,
+    #         data={
+    #             'cookie':json.dumps({'ds_user_id': ds_user_id, 'sessionid':sessionId})
+    #         }
+    #         )
+    #     except Exception as e:
+    #         logger.info(f"Error updating scraper {e}")
 
 
 

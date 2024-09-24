@@ -54,36 +54,52 @@ async def main(cur_user:str):
     kp = await get_user("c58cd9c3-76da-4790-92f8-54e27d432cc2", prisma, logger)
     user = await app_auth(cur_user, prisma, logger)
 
-    scrapers = [
-        user.get('Scraper')[0],
-        user.get('Scraper')[1],
-        user.get('Scraper')[2]
-    ]
+    scrapers = {
+        '0': {},
+        '1': {},
+        '2': {}
+    }
 
+    
+    for scrape in user.get('Scraper', None):
+        scrape_email = scrape.get('email', None)
+
+        if not scrape_email:
+            return
+
+        if 'kp' in scrape_email:   
+            scrapers['0'] = scrape
+        elif 'harry' in scrape_email:  
+            scrapers['1'] = scrape
+        elif 'ateeq' in scrape_email:  
+            scrapers['2'] = scrape
+
+
+        
     usernames = await get_usernames(prisma, logger)
 
-    index = 0
+    index = 2
     emailsSent = 0
     iterations = 0
     now = datetime.datetime.now()
     while True:
 
         if index != 0:
-            await asyncio.sleep(random.uniform(1400, 1600)) 
+            print('Sleeping')
+            # await asyncio.sleep(30) 
+            await asyncio.sleep(random.uniform(400, 1600)) 
         
         if index == 3:
             index = 0
 
-        scraper = scrapers[index]
+        user_scraper = scrapers.get(str(index))
 
         async with webdriver.Chrome(options=options) as driver:
 
             logger.info('Starting Scrape')
 
             await driver.get("https://www.instagram.com", wait_load=True)
-            await driver.sleep(3)
-
-            user_scraper = scraper
+            await driver.sleep(5)
 
             logger.info(f"Continuing with Scraper {index}")
             
@@ -91,7 +107,7 @@ async def main(cur_user:str):
             await scraper_sign_in(driver, prisma, user_scraper, logger, asyncio)
 
                 
-            await asyncio.sleep(3)
+            await asyncio.sleep(10)
 
 
             loop = True
