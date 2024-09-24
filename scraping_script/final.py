@@ -63,6 +63,9 @@ async def main(cur_user:str):
     usernames = await get_usernames(prisma, logger)
 
     index = 0
+    emailsSent = 0
+    iterations = 0
+    now = datetime.datetime.now()
     while True:
 
         if index != 0:
@@ -92,9 +95,6 @@ async def main(cur_user:str):
 
 
             loop = True
-            emailsSent = 0
-            iterations = 0
-            now = datetime.datetime.now()
             
             while loop:
                 if usernames is None or len(usernames) == 0 :

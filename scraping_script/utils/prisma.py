@@ -83,7 +83,11 @@ async def get_user(id:str, prisma:Prisma, logger):
                 'id': id 
             },
             include={
-                'Scraper':True,
+                'Scraper':{
+                    'order_by':{
+                        'createdAt':'asc'
+                    }
+                },
                 'Script':True
             }
         )
