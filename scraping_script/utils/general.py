@@ -18,9 +18,9 @@ async def navigate(driver, handle, logger, asyncio):
         return False
     
 
-async def scrape_detect(driver, logger, asyncio):
+async def scrape_detect(driver, logger, asyncio, XPATHS):
     try:
-        scrape = await driver.find_element(By.XPATH, PATHS['SCRAPE_DETECT'])
+        scrape = await driver.find_element(By.XPATH, XPATHS['SCRAPE_DETECT'])
         logger.info('Scrape detected, clicking...')
         await scrape.click()
         await asyncio.sleep(random.uniform(4, 6.5))
